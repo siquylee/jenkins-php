@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="money" default="full-build">
+     <property name="workdir" value="${project.basedir}"/>
+     <property name="srcdir" value="${workdir}"/>
+     
+     <!--  Default configuration files/settings -->
+     <property name="phpmd.conf" value="${workdir}/build/phpmd.xml"/>
+     <property name="phpcs.conf" value="${workdir}/build/phpcs.xml"/>
+     <property name="phpunit.conf" value="${workdir}/build/phpunit.xml"/>
+     <property name="phpdox.conf" value="${workdir}/build/phpdox.xml"/>
+     
+     <!-- Exclude directories from code analysis -->
+     <property name="exclude.dirs" value="tests/**,vendor/**"/>
+     <property name="exclude.dirs.pdepend" value="${exclude.dirs}"/>
+     <property name="exclude.dirs.phpcpd" value="${exclude.dirs}"/>
+     <property name="exclude.dirs.phpcs" value="${exclude.dirs}"/>
+     <property name="exclude.dirs.phploc" value="vendor/**"/>
+     <property name="exclude.dirs.phpmd" value="${exclude.dirs}"/>
+     
+     <!-- By default, we assume all tools to be on the $PATH -->
+     <property name="pdepend" value="pdepend"/>
+     <property name="phpcpd"  value="phpcpd"/>
+     <property name="phpcs"   value="phpcs"/>
+     <property name="phpdox"  value="phpdox"/>
+     <property name="phploc"  value="phploc"/>
+     <property name="phpmd"   value="phpmd"/>
+     <property name="phpunit" value="phpunit"/>
+     
+     <!-- Use this when the tools are located as PHARs in ${project.basedir}/build/tools
+     <property name="pdepend" value="${project.basedir}/build/tools/pdepend.phar"/>
+     <property name="phpcpd"  value="${project.basedir}/build/tools/phpcpd.phar"/>
+     <property name="phpcs"   value="${project.basedir}/build/tools/phpcs.phar"/>
+     <property name="phpdox"  value="${project.basedir}/build/tools/phpdox.phar"/>
+     <property name="phploc"  value="${project.basedir}/build/tools/phploc.phar"/>
+     <property name="phpmd"   value="${project.basedir}/build/tools/phpmd.phar"/>
+     <property name="phpunit" value="${project.basedir}/build/tools/phpunit.phar"/> -->
+     
+     <!-- Use this when the tools are managed by Composer in ${project.basedir}/vendor/bin
+     <property name="pdepend" value="${project.basedir}/vendor/bin/pdepend"/>
+     <property name="phpcpd"  value="${project.basedir}/vendor/bin/phpcpd"/>
+     <property name="phpcs"   value="${project.basedir}/vendor/bin/phpcs"/>
+     <property name="phpdox"  value="${project.basedir}/vendor/bin/phpdox"/>
+     <property name="phploc"  value="${project.basedir}/vendor/bin/phploc"/>
+     <property name="phpmd"   value="${project.basedir}/vendor/bin/phpmd"/>
+     <property name="phpunit" value="${project.basedir}/vendor/bin/phpunit"/> -->
+     
+    <target name="full-build" depends="prepare,static-analysis,phpunit-no-coverage,phpdox,check-failure" description="Performs static analysis, runs the tests, and generates project documentation" />
+    
+    <target name="full-build-coverage" depends="prepare,static-analysis,phpunit-coverage,phpdox,check-failure" description="Performs static analysis, runs the tests, and generates project documentation" />
+    
+    <target name="quick-build" depends="prepare,lint,phpunit-no-coverage" description="Performs a lint check and runs the tests (without generating code coverage reports)" />
+    
+    <target name="static-analysis" depends="lint,phploc-ci,pdepend,phpmd-ci,phpcs-ci,phpcpd-ci" description="Performs static analysis" />
+    
+    <target name="clean" unless="clean.done" description="Cleanup build artifacts">
+        <delete dir="${workdir}/build/api" />
+        <delete dir="${workdir}/build/coverage" />
+        <delete dir="${workdir}/build/coverage-xml" />
+        <delete dir="${workdir}/build/logs" />
+        <delete dir="${workdir}/build/pdepend" />
+        <delete dir="${workdir}/build/phpdox" />
+        <property name="clean.done" value="true" />
+    </target>
+    
+    <target name="prepare" unless="prepare.done" depends="clean" description="Prepare for build">
+        <mkdir dir="${workdir}/build/api" />
+        <mkdir dir="${workdir}/build/coverage" />
+        <mkdir dir="${workdir}/build/coverage-xml" />
+        <mkdir dir="${workdir}/build/logs" />
+        <mkdir dir="${workdir}/build/pdepend" />
+        <mkdir dir="${workdir}/build/phpdox" />
+        <property name="prepare.done" value="true" />
+    </target>
+    
+    <target name="lint" unless="lint.done" description="Perform syntax check of sourcecode files">
+        <phplint>
+            <fileset dir="${srcdir}" excludes="${exclude.dirs}">
+                <include name="**/*.php" />
+                <include name="*.php" />
+            </fileset>
+        </phplint>
+        <property name="lint.done" value="true" />
+    </target>
+    
+    <target name="phploc" unless="phploc.done" description="Measure project size using PHPLOC and print human readable output. Intended for usage on the command line.">
+        <phploc countTests="true">
+            <fileset dir="${srcdir}" excludes="${exclude.dirs.phploc}">
+                <include name="**/*.php" />
+                <include name="*.php" />
+            </fileset>
+        </phploc>
+        <property name="phploc.done" value="true" />
+    </target>
+    
+    <target name="phploc-ci" unless="phploc.done" depends="prepare" description="Measure project size using PHPLOC and log result in CSV and XML format. Intended for usage within a continuous integration environment.">
+        <phploc countTests="true">
+            <fileset dir="${srcdir}" excludes="${exclude.dirs.phploc}">
+                <include name="**/*.php" />
+                <include name="*.php" />
+            </fileset>
+            <formatter type="xml" outfile="build/logs/phploc.xml" />
+            <formatter type="csv" outfile="build/logs/phploc.csv" />
+        </phploc>
+        <property name="phploc.done" value="true" />
+    </target>
+    
+    <target name="pdepend" unless="pdepend.done" depends="prepare" description="Calculate software metrics using PHP_Depend and log result in XML format. Intended for usage within a continuous integration environment.">
+        <phpdepend>
+            <fileset dir="${srcdir}" excludes="${exclude.dirs.pdepend}">
+                <include name="**/*.php" />
+                <include name="*.php" />
+            </fileset>
+            <logger type="jdepend-xml" outfile="build/logs/jdepend.xml" />
+            <logger type="jdepend-chart" outfile="build/pdepend/dependencies.svg" />
+            <logger type="overview-pyramid" outfile="build/pdepend/overview-pyramid.svg" />
+        </phpdepend>
+        <property name="pdepend.done" value="true" />
+    </target>
+    
+    <target name="phpmd" unless="phpmd.done" description="Perform project mess detection using PHPMD and print human readable output. Intended for usage on the command line before committing.">
+        <available file="${srcdir}/phpmd.xml" type="file" property="phpmd.conf" value="${srcdir}/phpmd.xml" />
+        <available file="${phpmd.conf}" type="file" property="run.phpmd" value="true" />
+        <if>
+            <isset property="run.phpmd" />
+            <then>
+                <phpmd rulesets="${phpmd.conf}">
+                    <fileset dir="${srcdir}" excludes="${exclude.dirs.phpmd}">
+                        <include name="**/*.php" />
+                        <include name="*.php" />
+                    </fileset>
+                    <formatter type="text" outfile="build/logs/pmd.txt" />
+                </phpmd>
+            </then>
+        </if>
+        <property name="phpmd.done" value="true" />
+    </target>
+    
+    <target name="phpmd-ci" unless="phpmd.done" depends="prepare" description="Perform project mess detection using PHPMD and log result in XML format. Intended for usage within a continuous integration environment.">
+        <available file="${srcdir}/phpmd.xml" type="file" property="phpmd.conf" value="${srcdir}/phpmd.xml" />
+        <available file="${phpmd.conf}" type="file" property="run.phpmd" value="true" />
+        <if>
+            <isset property="run.phpmd" />
+            <then>
+                <phpmd rulesets="${phpmd.conf}">
+                    <fileset dir="${srcdir}" excludes="${exclude.dirs.phpmd}">
+                        <include name="**/*.php" />
+                        <include name="*.php" />
+                    </fileset>
+                    <formatter type="xml" outfile="build/logs/pmd.xml" />
+                </phpmd>
+            </then>
+        </if>
+        <property name="phpmd.done" value="true" />
+    </target>
+    
+    <target name="phpcs" unless="phpcs.done" description="Find coding standard violations using PHP_CodeSniffer and print human readable output. Intended for usage on the command line before committing.">
+        <phpcodesniffer standard="PSR2" format="checkstyle" allowedFileExtensions="php php5 inc">
+            <fileset dir="${srcdir}" excludes="${exclude.dirs.phpcs}">
+                <include name="**/*.php" />
+                <include name="*.php" />
+            </fileset>
+        </phpcodesniffer>
+        <property name="phpcs.done" value="true" />
+    </target>
+    
+    <target name="phpcs-ci" unless="phpcs.done" depends="prepare" description="Find coding standard violations using PHP_CodeSniffer and log result in XML format. Intended for usage within a continuous integration environment.">
+        <available file="${srcdir}/phpcs.xml" type="file" property="phpcs.conf" value="${srcdir}/phpcs.xml" />
+        <available file="${phpcs.conf}" type="file" property="run.phpcs" value="true" />
+        <if>
+            <isset property="run.phpcs" />
+            <then>
+                <phpcodesniffer standard="${phpcs.conf}" allowedFileExtensions="php php5 inc">
+                    <fileset dir="${srcdir}" excludes="${exclude.dirs.phpcs}">
+                        <include name="**/*.php" />
+                        <include name="*.php" />
+                    </fileset>
+                    <formatter type="checkstyle" outfile="build/logs/checkstyle.xml" />
+                </phpcodesniffer>
+            </then>
+            <else>
+                <phpcodesniffer standard="PSR2" allowedFileExtensions="php php5 inc">
+                    <fileset dir="${srcdir}" excludes="${exclude.dirs.phpcs}">
+                        <include name="**/*.php" />
+                        <include name="*.php" />
+                    </fileset>
+                    <formatter type="checkstyle" outfile="build/logs/checkstyle.xml" />
+                </phpcodesniffer>
+            </else>
+        </if>
+        <property name="phpcs.done" value="true" />
+    </target>
+    
+    <target name="phpcpd" unless="phpcpd.done" description="Find duplicate code using PHPCPD and print human readable output. Intended for usage on the command line before committing.">
+        <phpcpd>
+            <fileset dir="${srcdir}" excludes="${exclude.dirs.phpcpd}">
+                <include name="**/*.php" />
+                <include name="*.php" />
+            </fileset>
+        </phpcpd>
+        <property name="phpcpd.done" value="true" />
+    </target>
+    
+    <target name="phpcpd-ci" unless="phpcpd.done" depends="prepare" description="Find duplicate code using PHPCPD and log result in XML format. Intended for usage within a continuous integration environment.">
+        <phpcpd>
+            <fileset dir="${srcdir}" excludes="${exclude.dirs.phpcpd}">
+                <include name="**/*.php" />
+                <include name="*.php" />
+            </fileset>
+            <formatter type="pmd" outfile="build/logs/pmd-cpd.xml" />
+        </phpcpd>
+        <property name="phpcpd.done" value="true" />
+    </target>
+    
+    <target name="phpunit-coverage" unless="phpunit.done" depends="prepare" description="Run unit tests with PHPUnit">
+        <available file="${srcdir}/phpunit.xml" type="file" property="phpunit.conf" value="${srcdir}/phpunit.xml" />
+        <available file="${phpunit.conf}" type="file" property="run.phpunit" value="true" />
+        <if>
+            <isset property="run.phpunit" />
+            <then>
+                <exec executable="${phpunit}" returnProperty="result.phpunit">
+                    <arg value="--configuration" />
+                    <arg path="${phpunit.conf}" />
+                    <arg value="--log-junit" />
+                    <arg value="${workdir}/build/logs/junit.xml" />
+                    <arg value="--coverage-html" />
+                    <arg value="${workdir}/build/coverage" />
+                    <arg value="--coverage-xml" />
+                    <arg value="${workdir}/build/coverage-xml" />
+                    <arg value="--coverage-clover" />
+                    <arg value="${workdir}/build/logs/clover.xml" />
+                    <arg value="--coverage-crap4j" />
+                    <arg value="${workdir}/build/logs/crap4j.xml" />
+                </exec>
+            </then>
+        </if>
+        <property name="phpunit.done" value="true" />
+    </target>
+    
+    <target name="phpunit-no-coverage" unless="phpunit.done" depends="prepare" description="Run unit tests with PHPUnit (without generating code coverage reports)">
+        <available file="${srcdir}/phpunit.xml" type="file" property="phpunit.conf" value="${srcdir}/phpunit.xml" />
+        <available file="${phpunit.conf}" type="file" property="run.phpunit" value="true" />
+        <if>
+            <isset property="run.phpunit" />
+            <then>
+                <exec executable="${phpunit}">
+                    <arg value="--configuration" />
+                    <arg path="${phpunit.conf}" />
+                    <arg value="--no-coverage" />
+                    <arg value="--log-junit" />
+                    <arg value="${workdir}/build/logs/junit.xml" />
+                </exec>
+            </then>
+        </if>
+        <property name="phpunit.done" value="true" />
+    </target>
+    
+    <target name="composer" unless="composer.done" description="Run unit tests with PHPUnit">
+        <exec dir="${srcdir}" executable="${composer}">
+            <arg value="install" />
+            <arg value="--ignore-platform-reqs" />
+        </exec>
+        <property name="composer.done" value="true" />
+    </target>
+    
+    <target name="phpdox" unless="phpdox.done" depends="phploc-ci,phpcs-ci,phpmd-ci" description="Generate project documentation using phpDox">
+        <available file="${srcdir}/phpdox.xml" type="file" property="phpdox.conf" value="${srcdir}/phpdox.xml" />
+        <available file="${phpdox.conf}" type="file" property="run.phpdox" value="true" />
+        <if>
+            <isset property="run.phpdox" />
+            <then>
+                <exec executable="${phpdox}">
+                    <arg value="-f" />
+                    <arg path="${phpdox.conf}" />
+                </exec>
+            </then>
+        </if>
+        <property name="phpdox.done" value="true" />
+    </target>
+    
+    <target name="check-failure">
+        <fail message="PHPUnit did not finish successfully">
+            <condition>
+                <not>
+                    <equals arg1="${result.phpunit}" arg2="0" />
+                </not>
+            </condition>
+        </fail>
+    </target>
+</project>

@@ -1,0 +1,433 @@
+/**
+ * Fonts
+ */
+
+body, button, input, select, label, textarea {
+  font-family: $text;
+}
+.Codemirror, pre, #markdown-editor-input, .editor-toolbar, .code-base {
+  font-family: $mono;
+}
+
+/*
+ * Header Styles
+ */
+
+h1 {
+  font-size: 3.425em;
+  line-height: 1.22222222em;
+  margin-top: 0.48888889em;
+  margin-bottom: 0.48888889em;
+}
+h2 {
+  font-size: 2.8275em;
+  line-height: 1.294117647em;
+  margin-top: 0.8627451em;
+  margin-bottom: 0.43137255em;
+}
+h3 {
+  font-size: 2.333em;
+  line-height: 1.221428572em;
+  margin-top: 0.78571429em;
+  margin-bottom: 0.43137255em;
+}
+h4 {
+  font-size: 1.666em;
+  line-height: 1.375em;
+  margin-top: 0.78571429em;
+  margin-bottom: 0.43137255em;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 400;
+  position: relative;
+  display: block;
+  color: #555;
+  .subheader {
+    font-size: 0.5em;
+    line-height: 1em;
+    color: lighten($text-dark, 32%);
+  }
+}
+
+h5 {
+  font-size: 1.4em;
+}
+
+h5, h6 {
+  font-weight: 500;
+  line-height: 1.2em;
+  margin-top: 0.78571429em;
+  margin-bottom: 0.66em;
+}
+
+@include smaller-than($s) {
+  h1 {
+    font-size: 2.8275em;
+  }
+  h2 {
+    font-size: 2.333em;
+  }
+  h3 {
+    font-size: 1.666em;
+  }
+  h4 {
+    font-size: 1.333em;
+  }
+  h5 {
+    font-size: 1.161616em;
+  }
+}
+
+/*
+ * Link styling
+ */
+a, .link {
+  color: $primary;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color ease-in-out 80ms;
+  line-height: 1.6;
+  &:hover {
+    text-decoration: underline;
+    color: darken($primary, 20%);
+  }
+  &.icon {
+    display: inline-block;
+  }
+  svg {
+    position: relative;
+    display: inline-block;
+  }
+}
+
+/*
+ * Other HTML Text Elements
+ */
+p, ul, ol, pre, table, blockquote {
+  margin-top: 0.3em;
+  margin-bottom: 1.375em;
+}
+
+hr {
+  border: 0;
+  height: 1px;
+  background: #EAEAEA;
+  margin-bottom: $-l;
+  &.faded {
+    background-image: linear-gradient(to right, #FFF, #e3e0e0 20%, #e3e0e0 80%, #FFF);
+  }
+  &.margin-top, &.even {
+    margin-top: $-l;
+  }
+}
+
+strong, b, .bold, .strong {
+  font-weight: bold;
+  > strong, > b, > .bold, > .strong {
+    font-weight: bolder;
+  }
+}
+
+em, i, .italic {
+  font-style: italic;
+}
+
+small, p.small, span.small, .text-small {
+  font-size: 0.8em;
+  color: lighten($text-dark, 20%);
+  small, p.small, span.small, .text-small {
+    font-size: 1em;
+  }
+}
+
+sup, .superscript {
+  vertical-align: super;
+  font-size: 0.8em;
+}
+
+sub, .subscript {
+  vertical-align: sub;
+  font-size: 0.8em;
+}
+
+pre {
+  font-size: 12px;
+  background-color: #f5f5f5;
+  border: 1px solid #DDD;
+  padding-left: 31px;
+  position: relative;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  &:after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    width: 29px;
+    left: 0;
+    background-color: #f5f5f5;
+    height: 100%;
+    border-right: 1px solid #DDD;
+  }
+}
+
+@media print {
+  pre {
+    padding-left: 12px;
+  }
+  pre:after {
+    display: none;
+  }
+}
+
+blockquote {
+  display: block;
+  position: relative;
+  border-left: 4px solid $primary;
+  background-color: #F8F8F8;
+  padding: $-s $-m $-s $-xl;
+  &:before {
+    content: "\201C";
+    font-size: 2em;
+    font-weight: bold;
+    position: absolute;
+    top: $-s;
+    left: $-s;
+    color: lighten($text-dark, 20%);
+  }
+}
+
+.code-base {
+    background-color: #F8F8F8;
+    font-size: 0.80em;
+    border: 1px solid #DDD;
+    border-radius: 3px;
+}
+
+code {
+  @extend .code-base;
+  display: inline;
+  padding: 1px 3px;
+  white-space:pre;
+  line-height: 1.2em;
+  margin-bottom: 1.2em;
+}
+
+span.code {
+  @extend .code-base;
+  padding: 1px $-xs;
+}
+
+pre code {
+  background-color: transparent;
+  border: 0;
+  font-size: 1em;
+  display: block;
+  line-height: 1.6;
+}
+/*
+ * Text colors
+ */
+p.pos, p .pos, span.pos, .text-pos {
+  color: $positive;
+  fill: $positive;
+  &:hover {
+    color: $positive;
+    fill: $positive;
+  }
+}
+
+p.neg, p .neg, span.neg, .text-neg {
+  color: $negative;
+  fill: $negative;
+  &:hover {
+    color: $negative;
+    fill: $negative;
+  }
+}
+
+p.muted, p .muted, span.muted, .text-muted {
+	color: lighten($text-dark, 26%);
+	fill: lighten($text-dark, 26%);
+    &.small, .small {
+      color: lighten($text-dark, 32%);
+      fill: lighten($text-dark, 32%);
+    }
+}
+
+p.primary, p .primary, span.primary, .text-primary {
+	color: $primary;
+	fill: $primary;
+  &:hover {
+    color: $primary;
+    fill: $primary;
+  }
+}
+
+p.secondary, p .secondary, span.secondary, .text-secondary {
+	color: $secondary;
+	fill: $secondary;
+  &:hover {
+    color: $secondary;
+    fill: $secondary;
+  }
+}
+
+.text-book {
+  color: $color-book;
+  fill: $color-book;
+  &:hover {
+    color: $color-book;
+    fill: $color-book;
+  }
+}
+.text-page {
+  color: $color-page;
+  fill: $color-page;
+  &:hover {
+    color: $color-page;
+    fill: $color-page;
+  }
+  &.draft {
+    color: $color-page-draft;
+    fill: $color-page-draft;
+  }
+  &.draft:hover {
+    color: $color-page-draft;
+    fill: $color-page-draft;
+  }
+}
+.text-chapter {
+  color: $color-chapter;
+  fill: $color-chapter;
+  &:hover {
+    color: $color-chapter;
+    fill: $color-chapter;
+  }
+}
+.faded .text-book:hover {
+  color: $color-book !important;
+  fill: $color-book !important;
+}
+.faded .text-chapter:hover {
+  color: $color-chapter !important;
+  fill: $color-chapter !important;
+}
+.faded .text-page:hover {
+  color: $color-page !important;
+  fill: $color-page !important;
+}
+
+span.highlight {
+  //background-color: rgba($primary, 0.2);
+  font-weight: bold;
+  padding: 2px 4px;
+}
+
+/*
+ * Lists
+ */
+ul, ol {
+  overflow: hidden;
+  p {
+    margin: 0;
+  }
+}
+ul {
+  padding-left: $-m * 1.3;
+  list-style: disc;
+  ul {
+    list-style: circle;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  label {
+    margin: 0;
+  }
+}
+
+ol {
+  list-style: decimal;
+  padding-left: $-m * 2;
+}
+
+li.checkbox-item, li.task-list-item {
+  list-style: none;
+  margin-left: - ($-m * 1.3);
+  input[type="checkbox"] {
+    margin-right: $-xs;
+  }
+}
+
+/*
+ * Generic text styling classes
+ */
+.underlined {
+  text-decoration: underline;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-bigger {
+  font-size: 1.1em;
+}
+
+.text-large {
+  font-size: 1.6666em;
+}
+
+.no-color {
+  color: inherit;
+}
+
+.break-text {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/**
+ * Grouping
+ */
+.header-group {
+  margin: $-m 0;
+  h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+  }
+}
+
+span.sep {
+  color: #BBB;
+  padding: 0 $-xs;
+}
+
+.list > * {
+  display: block;
+}
+
+/**
+  * Icons
+  */
+i {
+  padding-right: $-xs;
+}
+
+.svg-icon {
+  width: 1em;
+  height: 1em;
+  display: inline-block;
+  position: relative;
+  bottom: -0.105em;
+  margin-right: $-xs;
+}
+

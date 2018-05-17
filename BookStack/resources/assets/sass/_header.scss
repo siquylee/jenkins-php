@@ -1,0 +1,251 @@
+/**
+ * Includes the main navigation header and the faded toolbar.
+ */
+
+header {
+  display: block;
+  z-index: 2;
+  top: 0;
+  background-color: $primary-dark;
+  color: #fff;
+  fill: #fff;
+  .padded {
+    padding: $-m;
+  }
+  border-bottom: 1px solid #DDD;
+  .links {
+    display: inline-block;
+    vertical-align: top;
+    margin-right: $-xl;
+    @include smaller-than($screen-md) {
+      margin-right: $-m;
+    }
+  }
+  .links a {
+    display: inline-block;
+    padding: $-m $-l;
+    color: #FFF;
+    fill: #FFF;
+    &:last-child {
+      padding-right: 0;
+    }
+    @include smaller-than($screen-md) {
+      padding: $-m $-s;
+    }
+  }
+  .avatar, .user-name {
+    display: inline-block;
+  }
+  .avatar {
+    width: 30px;
+    height: 30px;
+  }
+  .user-name {
+    vertical-align: top;
+    padding-top: $-m;
+    position: relative;
+    top: -3px;
+    display: inline-block;
+    cursor: pointer;
+    > * {
+      vertical-align: top;
+    }
+    > span {
+      padding-left: $-xs;
+      display: inline-block;
+      padding-top: $-xxs;
+    }
+    > svg {
+      padding-top: 4px;
+      font-size: 18px;
+    }
+    @include smaller-than($screen-md) {
+      padding-left: $-xs;
+      .name {
+        display: none;
+      }
+    }
+  }
+  @include smaller-than($screen-sm) {
+    text-align: center;
+    .float.right {
+      float: none;
+    }
+    .links a {
+      padding: $-s;
+    }
+    .user-name {
+      padding-top: $-s;
+    }
+  }
+}
+
+.header-search {
+  display: inline-block;
+}
+header .search-box {
+  display: inline-block;
+  margin-top: 10px;
+  input {
+    background-color: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #EEE;
+  }
+  button {
+    color: #EEE;
+    fill: #EEE;
+  }
+  ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+    color: #DDD;
+  }
+  ::-moz-placeholder { /* Firefox 19+ */
+    color: #DDD;
+  }
+  :-ms-input-placeholder { /* IE 10+ */
+    color: #DDD;
+  }
+  :-moz-placeholder { /* Firefox 18- */
+    color: #DDD;
+  }
+  @include smaller-than($screen-lg) {
+    max-width: 250px;
+  }
+  @include smaller-than($l) {
+    max-width: 200px;
+  }
+}
+
+@include smaller-than($s) {
+  .header-search {
+    display: block;
+  }
+}
+
+.logo {
+  display: inline-block;
+  &:hover {
+    color: #FFF;
+    text-decoration: none;
+  }
+}
+.logo-text {
+  display: inline-block;
+  font-size: 1.8em;
+  color: #fff;
+  font-weight: 400;
+  padding: 14px $-l 14px 0;
+  vertical-align: top;
+  line-height: 1;
+}
+.logo-image {
+  margin: $-xs $-s $-xs 0;
+  vertical-align: top;
+  height: 43px;
+}
+
+.breadcrumbs span.sep {
+  color: #aaa;
+  padding: 0 $-xs;
+}
+.faded {
+  a, button, span, span > div {
+    color: #666;
+    fill: #666;
+  }
+  .text-button {
+    opacity: 0.5;
+    transition: all ease-in-out 120ms;
+    &:hover {
+      opacity: 1;
+      text-decoration: none;
+    }
+  }
+}
+
+.faded span.faded-text {
+  display: inline-block;
+  padding: $-s;
+}
+
+.faded-small {
+  color: #000;
+  fill: #000;
+  font-size: 0.9em;
+  background-color: $primary-faded;
+}
+
+.toolbar-container {
+  background-color: #FFF;
+}
+
+.breadcrumbs .text-button, .action-buttons .text-button {
+  display: inline-block;
+  padding: $-s;
+  &:last-child {
+    padding-right: 0;
+  }
+  &:first-child {
+    padding-left: 0;
+  }
+}
+
+
+.action-buttons .dropdown-container:last-child a {
+  padding-right: 0;
+  padding-left: $-s;
+}
+.action-buttons {
+  text-align: right;
+  &.text-left {
+    text-align: left;
+    .text-button {
+      padding-right: $-m;
+      padding-left: 0;
+    }
+  }
+  &.text-center {
+    text-align: center;
+  }
+}
+
+@include smaller-than($m) {
+  .breadcrumbs .text-button, .action-buttons .text-button {
+    padding: $-xs $-xs;
+  }
+  .action-buttons .dropdown-container:last-child a {
+    padding-left: $-xs;
+  }
+  .breadcrumbs .text-button {
+    font-size: 0;
+  }
+  .breadcrumbs .text-button svg {
+    font-size: $fs-m;
+  }
+  .breadcrumbs a i {
+    font-size: $fs-m;
+    padding-right: 0;
+  }
+  .breadcrumbs span.sep {
+    padding: 0 $-xxs;
+  }
+  .toolbar .col-xs-1:first-child {
+    padding-right: 0;
+  }
+}
+
+.nav-tabs {
+  text-align: center;
+  a, .tab-item {
+    padding: $-m;
+    display: inline-block;
+    color: #666;
+    fill: #666;
+    cursor: pointer;
+    &.selected {
+      border-bottom: 2px solid $primary;
+    }
+  }
+}
+.faded-small .nav-tabs a {
+  padding: $-s $-m;
+}

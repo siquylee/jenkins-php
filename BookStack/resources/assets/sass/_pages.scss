@@ -1,0 +1,327 @@
+.page-editor {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  overflow: hidden;
+  .faded-small {
+    height: auto;
+  }
+  .edit-area {
+    flex: 1;
+    flex-direction: column;
+  }
+
+  .mce-tinymce {
+	box-shadow: none;
+  }
+
+  .mce-top-part::before {
+    box-shadow: none;
+  }
+}
+
+.draft-notification {
+  pointer-events: none;
+  transform: scale(0);
+  transition: transform ease-in-out 120ms;
+  transform-origin: 50% 50%;
+  &.visible {
+    transform: scale(1);
+  }
+}
+
+.page-style.editor {
+  padding: 0 !important;
+}
+
+.page-content {
+  max-width: 840px;
+  margin: 0 auto;
+  margin-top: $-xxl;
+  overflow-wrap: break-word;
+  .align-left {
+    text-align: left;
+  }
+  img.align-left, table.align-left {
+    float: left !important;
+    margin: $-xs $-s $-xs 0;
+  }
+  .align-right {
+    float: right !important;
+  }
+  img.align-right, table.align-right {
+    text-align: right;
+    margin: $-xs 0 $-xs $-s;
+  }
+  .align-center {
+    text-align: center;
+  }
+  img {
+    max-width: 100%;
+    height:auto;
+  }
+  h1, h2, h3, h4, h5, h6, pre {
+    clear: left;
+  }
+  hr {
+    clear: both;
+    margin: $-m 0;
+  }
+  table {
+    hyphens: auto;
+    table-layout: fixed;
+    max-width: 100%;
+    height: auto !important;
+  }
+
+  // diffs
+  ins,
+  del {
+    text-decoration: none;
+  }
+  ins {
+    background: #dbffdb;
+  }
+  del {
+    background: #FFECEC;
+  }
+}
+
+// Page content pointers
+.pointer-container {
+  position: relative;
+  display: none;
+  left: 0;
+  z-index: 10;
+}
+.pointer {
+  border: 1px solid #CCC;
+  display: inline-block;
+  padding: $-s $-s;
+  border-radius: 4px;
+  box-shadow: 0 0 8px 1px rgba(212, 209, 209, 0.35);
+  position: absolute;
+  top: -60px;
+  background-color:#FFF;
+  width: 272px;
+  z-index: 55;
+  &:before {
+    position: absolute;
+    left: 50%;
+    bottom: -9px;
+    width: 16px;
+    height: 16px;
+    margin-left: -8px;
+    content: '';
+    display: block;
+    background-color:#FFF;
+    transform: rotate(45deg);
+    transform-origin: 50% 50%;
+    border-bottom: 1px solid #CCC;
+    border-right: 1px solid #CCC;
+    z-index: 56;
+  }
+  input {
+    background-color: #FFF;
+    border: 1px solid #DDD;
+    color: #666;
+    width: 172px;
+    z-index: 40;
+  }
+  input, button {
+    position: relative;
+    border-radius: 0;
+    height: 28px;
+    font-size: 12px;
+    vertical-align: top;
+  }
+  > i {
+    color: #888;
+    font-size: 18px;
+    padding-top: 4px;
+  }
+  span.icon {
+    cursor: pointer;
+    user-select: none;
+  }
+  .button {
+    line-height: 1;
+    margin: 0 0 0 -4px;
+    box-shadow: none;
+  }
+}
+
+// Attribute form
+.floating-toolbox {
+  background-color: #FFF;
+  border: 1px solid #DDD;
+  right: $-xl*2;
+  width: 48px;
+  overflow: hidden;
+  align-items: stretch;
+  flex-direction: row;
+  display: flex;
+  transition: width ease-in-out 180ms;
+  margin-top: -1px;
+  min-height: 0;
+  &.open {
+    width: 480px;
+  }
+  [toolbox-toggle] svg {
+    transition: transform ease-in-out 180ms;
+  }
+  [toolbox-toggle] {
+    transition: background-color ease-in-out 180ms;
+  }
+  &.open [toolbox-toggle] {
+    background-color: rgba(255, 0, 0, 0.29);
+  }
+  &.open [toolbox-toggle] svg {
+    transform: rotate(180deg);
+  }
+  > div {
+    flex: 1;
+    position: relative;
+  }
+  .tabs {
+    display: block;
+    border-right: 1px solid #DDD;
+    width: 48px;
+    flex: 0 1 auto;
+  }
+  .tabs svg {
+    fill: rgba(0, 0, 0, 0.5);
+    padding: 0;
+    margin: 0;
+  }
+  .tabs > span {
+    display: block;
+    cursor: pointer;
+    padding: $-s $-m;
+    font-size: 13.5px;
+    line-height: 1.6;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  }
+  &.open .tabs > span.active {
+    fill: #444;
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+  div[toolbox-tab-content] {
+    padding-bottom: 45px;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-height: 0px;
+    overflow-y: scroll;
+  }
+  div[toolbox-tab-content] .padded {
+    flex: 1;
+    padding-top: 0;
+  }
+  div[toolbox-tab-content] .padded.files {
+	overflow-x: hidden;
+  }
+  h4 {
+    font-size: 24px;
+    margin: $-m 0 0 0;
+    padding: 0 $-l $-s $-l;
+  }
+  .tags input {
+    max-width: 100%;
+    width: 100%;
+    min-width: 50px;
+  }
+  .tags td, .tag-table > div > div > div {
+    padding-right: $-s;
+    padding-top: $-s;
+    position: relative;
+  }
+  .handle {
+    user-select: none;
+    cursor: move;
+    fill: #999;
+  }
+  form {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    overflow-y: scroll;
+  }
+  table td, table th {
+    overflow: visible;
+  }
+}
+
+[toolbox-tab-content] {
+  display: none;
+}
+
+.tag-display {
+  position: relative;
+  table {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  tr:first-child td {
+    padding-top: 0;
+  }
+  .heading th {
+    padding: $-xs $-s;
+    color: rgba(100, 100, 100, 0.7);
+    border: 0;
+    font-weight: 400;
+  }
+  td {
+    border: 0;
+    border-bottom: 1px solid #EEE;
+    padding: $-xs $-s;
+    color: #444;
+  }
+  tr td:first-child {
+    padding-left:0;
+  }
+  .tag-value {
+    color: #888;
+  }
+  tr:last-child td {
+    border-bottom: none;
+  }
+  .tag {
+    padding: $-s;
+  }
+}
+
+.suggestion-box {
+  position: absolute;
+  background-color: #FFF;
+  border: 1px solid #BBB;
+  box-shadow: $bs-light;
+  list-style: none;
+  z-index: 100;
+  padding: 0;
+  margin: 0;
+  border-radius: 3px;
+  li {
+    display: block;
+    padding: $-xs $-s;
+    border-bottom: 1px solid #DDD;
+    &:last-child {
+      border-bottom: 0;
+    }
+    &.active {
+      background-color: #EEE;
+    }
+  }
+}
+
+.comment-editor .CodeMirror, .comment-editor .CodeMirror-scroll {
+  min-height: 175px;
+}
+
+/* FIXME - Ugly hack to modify the media plugin for TinyMCE */
+.mce-floatpanel[aria-label="Insert/edit media"] {
+  .mce-open {
+    display: none;
+  }
+}

@@ -1,0 +1,30 @@
+version: '3'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ..:/var/www
+    depends_on:
+    - db
+    environment:
+    - PHING_VERBOSE
+    - BUIL_TARGET
+    - WORK_DIR=/var/www/    # Alway ends with /
+    - JENKINS_HOME
+    - DB_HOST=db
+    - DB_PORT=3306
+    - DB_DATABASE=bookstack
+    - DB_USERNAME=root
+    - DB_PASSWORD=secret
+    - APP_ENV=testing
+    - APP_DEBUG=false
+    - APP_KEY
+    ports:
+    - 80:80
+  db:
+    image: mysql:5.7.21
+    environment:
+    - MYSQL_ROOT_PASSWORD=secret
+    - MYSQL_DATABASE=bookstack

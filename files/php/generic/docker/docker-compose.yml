@@ -1,0 +1,15 @@
+version: '3'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ..:/var/www
+    environment:
+    - PHING_VERBOSE
+    - BUIL_TARGET
+    - WORK_DIR=/var/www/
+    - JENKINS_HOME
+    ports:
+    - 80:80

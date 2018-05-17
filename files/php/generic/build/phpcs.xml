@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ruleset name="PHP_CodeSniffer">
+    <file>../src</file>
+    <arg name="tab-width" value="4" />
+    <!-- Include the whole PSR-2 standard -->
+    <rule ref="PSR2" />
+</ruleset>
+

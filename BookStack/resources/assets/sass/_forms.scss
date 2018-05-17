@@ -1,0 +1,328 @@
+
+.input-base {
+  background-color: #FFF;
+  border-radius: 3px;
+  border: 1px solid #D4D4D4;
+  display: inline-block;
+  font-size: $fs-s;
+  padding: $-xs*1.5;
+  color: #666;
+  width: 250px;
+  max-width: 100%;
+  &.neg, &.invalid {
+    border: 1px solid $negative;
+  }
+  &.pos, &.valid {
+    border: 1px solid $positive;
+  }
+  &.disabled, &[disabled] {
+    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAYAAADEUlfTAAAAMUlEQVQIW2NkwAGuXbv2nxGbHEhCS0uLEUMSJgHShCKJLIEiiS4Bl8QmAZbEJQGSBAC62BuJ+tt7zgAAAABJRU5ErkJggg==);
+  }
+  &:focus {
+    outline: 0;
+  }
+}
+
+.fake-input {
+  @extend .input-base;
+  overflow: auto;
+}
+
+#html-editor {
+  display: none;
+}
+
+#markdown-editor {
+  position: relative;
+  z-index: 5;
+  #markdown-editor-input {
+    font-style: normal;
+    font-weight: 400;
+    padding: $-xs $-m;
+    color: #444;
+    border-radius: 0;
+    max-height: 100%;
+    flex: 1;
+    border: 0;
+    width: 100%;
+    &:focus {
+      outline: 0;
+    }
+  }
+  .markdown-display, .markdown-editor-wrap {
+    flex: 1;
+    position: relative;
+  }
+  .markdown-editor-wrap {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #DDD;
+    width: 50%;
+    max-width: 50%;
+  }
+}
+
+.markdown-display {
+  padding: 0 $-m 0;
+  margin-left: -1px;
+  overflow-y: scroll;
+  &.page-content {
+    margin: 0 auto;
+    width: 100%;
+    max-width: 100%;
+  }
+  [drawio-diagram]:hover {
+    outline: 2px solid $primary;
+  }
+}
+
+.editor-toolbar {
+  width: 100%;
+  padding: $-xs $-m;
+  font-size: 11px;
+  line-height: 1.6;
+  border-bottom: 1px solid #DDD;
+  background-color: #EEE;
+  flex: none;
+  &:after {
+    content: '';
+    display: block;
+    clear: both;
+  }
+}
+
+
+label {
+  display: block;
+  line-height: 1.4em;
+  font-size: 0.94em;
+  font-weight: 400;
+  color: #999;
+  padding-bottom: 2px;
+  margin-bottom: 0.2em;
+  &.inline {
+    display: inline-block;
+  }
+}
+
+label.radio, label.checkbox {
+  font-weight: 400;
+  user-select: none;
+  input[type="radio"], input[type="checkbox"] {
+    margin-right: $-xs;
+  }
+}
+
+label.inline.checkbox {
+  margin-right: $-m;
+}
+
+label + p.small {
+  margin-bottom: 0.8em;
+}
+
+table.form-table {
+  max-width: 100%;
+  td {
+    overflow: hidden;
+    padding: $-xxs/2 0;
+  }
+}
+
+input[type="text"], input[type="number"], input[type="email"], input[type="date"], input[type="search"], input[type="url"], input[type="password"], select, textarea {
+  @extend .input-base;
+}
+
+input[type=date] {
+  width: 190px;
+}
+
+.toggle-switch {
+  display: inline-block;
+  background-color: #BBB;
+  width: 36px;
+  height: 14px;
+  border-radius: 7px;
+  position: relative;
+  transition: all ease-in-out 120ms;
+  cursor: pointer;
+  user-select: none;
+  &:after {
+    content: '';
+    display: block;
+    position: relative;
+    left: 0;
+    margin-top: -3px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #fafafa;
+    border: 1px solid #CCC;
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
+    transition: all ease-in-out 120ms;
+  }
+  &.active {
+    background-color: rgba($positive, 0.4);
+    &:after {
+      left: 16px;
+      background-color: $positive;
+      border: darken($positive, 20%);
+    }
+  }
+}
+.toggle-switch-checkbox {
+  display: none;
+}
+input:checked + .toggle-switch {
+  background-color: rgba($positive, 0.4);
+  &:after {
+    left: 16px;
+    background-color: $positive;
+    border: darken($positive, 20%);
+  }
+}
+
+.form-group {
+  margin-bottom: $-s;
+  textarea {
+    display: block;
+    width: 100%;
+    min-height: 64px;
+  }
+}
+
+.simple-code-input {
+  background-color: #F8F8F8;
+  font-family: monospace;
+  font-size: 12px;
+  min-height: 100px;
+}
+
+.form-group {
+  .text-pos, .text-neg {
+    padding: $-xs 0;
+  }
+}
+
+.form-group[collapsible] {
+  margin-left: -$-m;
+  margin-right: -$-m;
+  padding: 0 $-m;
+  border-top: 1px solid #DDD;
+  border-bottom: 1px solid #DDD;
+  .collapse-title {
+    margin-left: -$-m;
+    margin-right: -$-m;
+    padding: $-s $-m;
+  }
+  .collapse-title, .collapse-title label {
+    cursor: pointer;
+  }
+  .collapse-title label {
+    padding-bottom: 0;
+    margin-bottom: 0;
+    color: inherit;
+  }
+  .collapse-title label:before {
+    display: inline-block;
+    content: '▸';
+    margin-right: $-m;
+    transition: all ease-in-out 400ms;
+    transform: rotate(0);
+  }
+  .collapse-content {
+    display: none;
+    padding-bottom: $-m;
+  }
+  &.open .collapse-title label:before {
+    transform: rotate(90deg);
+  }
+  &+.form-group[collapsible] {
+    margin-top: -($-s + 1);
+  }
+}
+
+.inline-input-style {
+  display: block;
+  width: 100%;
+  padding: $-s;
+}
+
+.title-input input[type="text"] {
+  @extend .inline-input-style;
+  margin-top: 0;
+  font-size: 2em;
+}
+
+.title-input.page-title {
+  font-size: 0.8em;
+  .input {
+    border: 0;
+    margin-bottom: -1px;
+  }
+  input[type="text"] {
+    max-width: 840px;
+    margin: 0 auto;
+    border: none;
+  }
+}
+
+.page-title input {
+  display: block;
+  width: 100%;
+  font-size: 1.4em;
+}
+
+.description-input textarea {
+  @extend .inline-input-style;
+  font-size: $fs-m;
+  color: #666;
+  width: 100%;
+}
+
+div[editor-type="markdown"] .title-input.page-title input[type="text"] {
+  max-width: 100%;
+}
+
+.search-box {
+  max-width: 100%;
+  position: relative;
+  button {
+    background-color: transparent;
+    border: none;
+    color: $primary;
+    padding: 0;
+    cursor: pointer;
+    position: absolute;
+    left: 8px;
+    top: 9.5px;
+  }
+  input {
+    display: block;
+    padding-left: $-l;
+    width: 300px;
+    max-width: 100%;
+  }
+}
+
+.outline > input {
+  border: 0;
+  border-bottom: 2px solid #DDD;
+  border-radius: 0;
+  &:focus, &:active {
+    border: 0;
+    border-bottom: 2px solid #AAA;
+    outline: 0;
+  }
+}
+
+#login-form label[for="remember"] {
+  margin: 0;
+}
+#login-form label.toggle-switch {
+  margin-left: $-xl;
+}
+
+.image-picker img {
+  background-color: #BBB;
+}
